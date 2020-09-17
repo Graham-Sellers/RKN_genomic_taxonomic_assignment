@@ -1,0 +1,14 @@
+name: tax
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - kraken2=2.0.9
+  - Python=3.7.4
+  - biopython=1.77
+  - blast
+  - matplotlib=3.3.1
+  - scipy=1.5.2
+  - notebook
+ - snakemake-minimal=5.3.0

@@ -1,0 +1,10 @@
+name: kraken2
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - kraken2=2.0.9
+  - Python=3.7.4
+  - biopython=1.77
+  - snakemake-minimal=5.3.0
