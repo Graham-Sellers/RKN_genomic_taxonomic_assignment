@@ -1,9 +1,13 @@
+# number of times to resample the genome per fragment size
+# number of fastas generated per fragment size
 resample:
   10
 
+# number of fragments per fasta file
 coverage:
   2000
 
+# fragment size or length
 size:
   - 100
   - 200
@@ -12,6 +16,8 @@ size:
   - 5000
   - 10000
 
+# error rates/mutations
+# to be added later
 error:
   - 3
   - 10
