@@ -1,9 +1,9 @@
-# shell environment code tests
+# tests in shell
 
 # FASTQ TO FASTA
 # converting fastq to fasta format
 
-path=/media/graham/Storage/nems
+path=/media/graham/Storage/nems/
 
 samples=$(ls $path/nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/ | grep '.fastq' | sed 's/.fastq//')
 

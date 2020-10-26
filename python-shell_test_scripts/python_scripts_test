@@ -1,0 +1,25 @@
+# tests in python
+
+path='/media/graham/Storage/nems/'
+
+# merge all fastq outputs per barcode file, rename and stick elsewhere
+
+import shutil
+import os
+import glob
+
+path='/media/graham/Storage/nems/'
+
+inpath=path+'fast5_output/HAC_barcode_qfiltered/pass/'
+outpath=path+'nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/'
+barcodes=os.listdir(inpath)
+
+for barcode in barcodes:
+    outfilename = outpath + barcode + '.fastq'
+    with open(outfilename, 'wb') as outfile:
+        for filename in glob.glob(inpath + barcode + '/*.fastq'):
+            print(filename)
+            if filename == outfilename:
+                continue
+            with open(filename, 'rb') as readfile:
+                shutil.copyfileobj(readfile, outfile)
