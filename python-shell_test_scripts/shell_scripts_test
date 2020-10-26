@@ -1,5 +1,6 @@
 # tests in shell
 
+# path is only here to allow for ease of wrangling from secondary HDD
 path=/media/graham/Storage/nems/
 
 ################################################################################

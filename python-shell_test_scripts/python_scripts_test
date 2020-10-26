@@ -1,5 +1,6 @@
 # tests in python
 
+# path is only here to allow for ease of wrangling from secondary HDD
 path='/media/graham/Storage/nems/'
 
 ################################################################################
@@ -27,8 +28,6 @@ for barcode in barcodes:
             with open(filename, 'rb') as readfile:
                 shutil.copyfileobj(readfile, outfile)
 
-
-
 ################################################################################
 # SIZE SELECTING READS
 # for messing around with different minimum sequence length (pre Kraken2 analysis) see if accuracy increase?
@@ -53,3 +52,133 @@ for file in files:
         #seqs=SeqIO.parse(infile,'fasta')
         #for seq in seqs if len(seq) >= size:
         SeqIO.write(seqs,outfile,'fasta')
+
+################################################################################
+# MAKING A KRAKEN2 TSV OUTPUT
+# pandas dataframe of readcount per taxominic level for each sample
+# human readable and easy to push through R etc?
+# based on current rough directory system, will need to be changed in accordance
+
+import pandas as pd
+import numpy as np
+import glob
+
+path='/media/graham/Storage/nems/'
+
+ma_list = glob.glob(path+'nanopore_test_data/output/*/*/*.txt')
+ma_list.sort()
+whole_bits=[]
+for output in ma_list:
+    with open(output) as file:
+        bits=[]
+        bits.append(output)
+        for line in file:
+            line=line.split('\t')
+            if int(line[2])>0:
+                bits.append('%s\t%s' %(line[5].strip(),line[2]))
+    whole_bits.append(bits)
+
+# make into dataframe:
+
+df=pd.DataFrame()
+for i in range(len(whole_bits)):
+    dfp=pd.DataFrame([x.split('\t') for x in whole_bits[i][1:]],columns=['Taxonomy',whole_bits[i][0]])
+    dfp.index=dfp['Taxonomy']
+    dfp=dfp.drop(dfp.columns[0],axis=1)
+    df=pd.concat([df,dfp],axis=1,sort=False).fillna(0)
+df=df.transpose()
+df
+
+# change index names to be input_method_sample:
+
+dictionary={'barcode01':'mig_6',
+            'barcode02': 'mig_9',
+            'barcode03': 'mig_10',
+            'barcode04': 'mig_11',
+            'barcode05': 'mi♀️i_9',
+            'barcode06': 'mi♀️i_10'}
+
+index_rename=[]
+for index in df.index:
+    name=index.split('/')[2:]
+    for key in dictionary:
+        if key in name[2]:
+            name[2]=dictionary[key]
+    name='_'.join(name)
+    index_rename.append(name)
+index_rename
+
+df.index=index_rename
+
+# change order of columns (taxonomy)
+
+cols = list(df.columns.values)
+cols = ['unclassified',
+    'Meloidogyne',
+    'Meloidogyne incognita group',
+    'Meloidogyne incognita',
+    'Meloidogyne arenaria',
+    'Meloidogyne javanica',
+    'Meloidogyne floridensis',
+    'Meloidogyne enterolobii',
+    'Meloidogyne luci',
+    'Meloidogyne hapla',
+    'Meloidogyne graminicola']
+df=df[cols]
+df.to_csv(path+'nanopore_test_data/output/HAC_kraken2_standard_fasta+fastq.tsv',sep='\t')
+df
+
+################################################################################
+# READLENGTHS FOR HISTS IN R
+# make pandas dataframe of all reads from each sample
+# just for colour, not decided on the actual software for qc visualisation of reads yet.
+
+from Bio import SeqIO
+import os
+import pandas as pd
+
+path='/media/graham/Storage/nems/'
+
+path_to_in=path+'nanopore_test_data/02_nanopore_fasta_HAC_barcode_qfilterpass/'
+df=pd.DataFrame()
+
+files=os.listdir(path_to_in)
+files.sort()
+
+# make into dataframe:
+
+for file in files:
+    print(file)
+    with open(path_to_in+file,'r') as infile:
+        seqs=SeqIO.parse(infile,'fasta')
+        read_lengths=[]
+        for seq in seqs:
+            read_lengths.append(len(seq))
+        read_lengths.sort()
+    dfp=pd.DataFrame(read_lengths,columns=[file])
+    df=pd.concat([df,dfp],axis=1,sort=False)
+
+# rename columns
+
+dictionary={'barcode01':'mig_6',
+            'barcode02': 'mig_9',
+            'barcode03': 'mig_10',
+            'barcode04': 'mig_11',
+            'barcode05': 'mi♀️i_9',
+            'barcode06': 'mi♀️i_10'}
+
+column_rename=[]
+for column in df.columns:
+    for key in dictionary:
+        if key in column:
+            column=dictionary[key]
+    column_rename.append(column)
+column_rename
+
+df.columns=column_rename
+
+# export to .tsv
+
+df.to_csv(path+'nanopore_test_data/output/HAC_readlengths.tsv',sep='\t')
+
+df
