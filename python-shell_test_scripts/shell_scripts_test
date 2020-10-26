@@ -1,7 +1,10 @@
 # tests in shell
 
+path=/media/graham/Storage/nems/
+
+################################################################################
 # FASTQ TO FASTA
-# converting fastq to fasta format
+# converting fastq to fasta format (just incase this is easier than using straight fastq)
 
 path=/media/graham/Storage/nems/
 
@@ -15,8 +18,7 @@ seqkit fq2fa $path/nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/
 -o $path/nanopore_test_data/02_nanopore_fasta_HAC_barcode_qfilterpass/${sample}.fasta
 done
 
-#####################
-
+################################################################################
 # KRAKEN2 FASTA INPUT
 # using fasta input for Kraken2 with a small confidence value (0.01)
 
@@ -38,8 +40,7 @@ $path/nanopore_test_data/02_nanopore_fasta_HAC_barcode_qfilterpass/${a}.fasta \
 --report $path/nanopore_test_data/output/HAC_fasta_input/kraken2_standard/${a}.txt
 done
 
-#####################
-
+################################################################################
 # KRAKEN2 FASTQ INPUT
 # using fastq input for Kraken2 with a small confidence value (0.01)
 # additionally uses --minimum-base-quality 10 (another level of quality control)

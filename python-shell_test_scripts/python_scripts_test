@@ -2,6 +2,8 @@
 
 path='/media/graham/Storage/nems/'
 
+################################################################################
+#MERGE ALL FASTQ FILES IN EACH BARCODE DIRECTORY
 # merge all fastq outputs per barcode file, rename and stick elsewhere
 
 import shutil
@@ -13,6 +15,7 @@ path='/media/graham/Storage/nems/'
 inpath=path+'fast5_output/HAC_barcode_qfiltered/pass/'
 outpath=path+'nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/'
 barcodes=os.listdir(inpath)
+print(barcodes)
 
 for barcode in barcodes:
     outfilename = outpath + barcode + '.fastq'
@@ -23,3 +26,30 @@ for barcode in barcodes:
                 continue
             with open(filename, 'rb') as readfile:
                 shutil.copyfileobj(readfile, outfile)
+
+
+
+################################################################################
+# SIZE SELECTING READS
+# for messing around with different minimum sequence length (pre Kraken2 analysis) see if accuracy increase?
+
+from Bio import SeqIO
+import glob
+import os
+
+path='/media/graham/Storage/nems/'
+
+size=5000 # change for different minimum sizes
+
+path_to_in=path+'nanopore_test_data/02_nanopore_fasta/'
+path_to_out=path+'nanopore_test_data/03_size_selected_fasta/'
+read_lengths=[]
+
+files=os.listdir(path_to_in)
+files.sort()
+for file in files:
+    with open(path_to_in+file,'r') as infile, open(path_to_out+file.replace('.fasta','_'+str(size)+'.fasta'),'w') as outfile:
+        seqs=[s for s in SeqIO.parse(infile,'fasta') if len(s)>=size]
+        #seqs=SeqIO.parse(infile,'fasta')
+        #for seq in seqs if len(seq) >= size:
+        SeqIO.write(seqs,outfile,'fasta')
