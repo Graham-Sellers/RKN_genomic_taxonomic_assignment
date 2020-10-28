@@ -1,0 +1,38 @@
+################################################################################
+# MAKING A KRAKEN2 TSV OUTPUT
+# pandas dataframe of readcount per taxominic level for each sample
+# human readable and easy to push through R etc?
+# based on current rough directory system, will need to be changed in accordance
+
+import pandas as pd
+import numpy as np
+import glob
+
+path='/media/graham/Storage/nems/'
+
+ma_list = glob.glob(path+'nanopore_test_data/output//HAC_fastq_input/kraken2_standard_qc/*.txt')
+ma_list.sort()
+whole_bits=[]
+for output in ma_list:
+    with open(output) as file:
+        bits=[]
+        bits.append(output)
+        for line in file:
+            line=line.split('\t')
+            if int(line[2])>0:
+                bits.append('%s\t%s' %(line[5].strip(),line[2]))
+    whole_bits.append(bits)
+
+# make into dataframe:
+
+df=pd.DataFrame()
+for i in range(len(whole_bits)):
+    sample=whole_bits[i][0].split('/')[-1]
+    dfp=pd.DataFrame([x.split('\t') for x in whole_bits[i][1:]],columns=['Taxonomy',sample])
+    dfp.index=dfp['Taxonomy']
+    dfp=dfp.drop(dfp.columns[0],axis=1)
+    df=pd.concat([df,dfp],axis=1,sort=False).fillna(0)
+df=df.transpose()
+
+df.to_csv(path+'nanopore_test_data/output/HAC_kraken2_standard_fastq.tsv',sep='\t')
+df
