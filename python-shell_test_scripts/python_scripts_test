@@ -65,7 +65,7 @@ import glob
 
 path='/media/graham/Storage/nems/'
 
-ma_list = glob.glob(path+'nanopore_test_data/output/*/*/*.txt')
+ma_list = glob.glob(path+'nanopore_test_data/output//HAC_fastq_input/kraken2_standard_qc/*.txt')
 ma_list.sort()
 whole_bits=[]
 for output in ma_list:
@@ -82,51 +82,53 @@ for output in ma_list:
 
 df=pd.DataFrame()
 for i in range(len(whole_bits)):
-    dfp=pd.DataFrame([x.split('\t') for x in whole_bits[i][1:]],columns=['Taxonomy',whole_bits[i][0]])
+    sample=whole_bits[i][0].split('/')[-1]
+    dfp=pd.DataFrame([x.split('\t') for x in whole_bits[i][1:]],columns=['Taxonomy',sample])
     dfp.index=dfp['Taxonomy']
     dfp=dfp.drop(dfp.columns[0],axis=1)
     df=pd.concat([df,dfp],axis=1,sort=False).fillna(0)
 df=df.transpose()
+
+df.to_csv(path+'nanopore_test_data/output/HAC_kraken2_standard_fastq.tsv',sep='\t')
 df
 
 # change index names to be input_method_sample:
+#
+# dictionary={'barcode01':'mig_6',
+#             'barcode02': 'mig_9',
+#             'barcode03': 'mig_10',
+#             'barcode04': 'mig_11',
+#             'barcode05': 'mi♀️i_9',
+#             'barcode06': 'mi♀️i_10'}
+#
+# index_rename=[]
+# for index in df.index:
+#     name=index.split('/')[2:]
+#     for key in dictionary:
+#         if key in name[2]:
+#             name[2]=dictionary[key]
+#     name='_'.join(name)
+#     index_rename.append(name)
+# index_rename
+#
+# df.index=index_rename
+#
+# # change order of columns (taxonomy)
+#
+# cols = list(df.columns.values)
+# cols = ['unclassified',
+#     'Meloidogyne',
+#     'Meloidogyne incognita group',
+#     'Meloidogyne incognita',
+#     'Meloidogyne arenaria',
+#     'Meloidogyne javanica',
+#     'Meloidogyne floridensis',
+#     'Meloidogyne enterolobii',
+#     'Meloidogyne luci',
+#     'Meloidogyne hapla',
+#     'Meloidogyne graminicola']
+# df=df[cols]
 
-dictionary={'barcode01':'mig_6',
-            'barcode02': 'mig_9',
-            'barcode03': 'mig_10',
-            'barcode04': 'mig_11',
-            'barcode05': 'mi♀️i_9',
-            'barcode06': 'mi♀️i_10'}
-
-index_rename=[]
-for index in df.index:
-    name=index.split('/')[2:]
-    for key in dictionary:
-        if key in name[2]:
-            name[2]=dictionary[key]
-    name='_'.join(name)
-    index_rename.append(name)
-index_rename
-
-df.index=index_rename
-
-# change order of columns (taxonomy)
-
-cols = list(df.columns.values)
-cols = ['unclassified',
-    'Meloidogyne',
-    'Meloidogyne incognita group',
-    'Meloidogyne incognita',
-    'Meloidogyne arenaria',
-    'Meloidogyne javanica',
-    'Meloidogyne floridensis',
-    'Meloidogyne enterolobii',
-    'Meloidogyne luci',
-    'Meloidogyne hapla',
-    'Meloidogyne graminicola']
-df=df[cols]
-df.to_csv(path+'nanopore_test_data/output/HAC_kraken2_standard_fasta+fastq.tsv',sep='\t')
-df
 
 ################################################################################
 # READLENGTHS FOR HISTS IN R
@@ -182,3 +184,45 @@ df.columns=column_rename
 df.to_csv(path+'nanopore_test_data/output/HAC_readlengths.tsv',sep='\t')
 
 df
+
+################################################################################
+# GENOME ASSEMBLY GRABBING AND DOWNLOADING
+# needs fixing
+
+from Bio import Entrez
+import urllib.request
+import datetime
+
+path='/media/graham/Storage/nems/'
+
+Entrez.email='grahamssellers@gmail.com'
+
+search_list=[]
+search=('Solanum lycopersicum')
+with Entrez.esearch(db='assembly', term=search+'[orgn]', idtype='acc',retmax=100000) as handle:
+    record = Entrez.read(handle)
+    print(record['Count'])
+    for r in record['IdList']:
+        search_list.append(r)
+
+ftp=[]
+base='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/'
+
+for rec in search_list:
+    with Entrez.efetch(db='Assembly',id=rec,rettype='docsum',retmode='xml',idtype='acc',) as handle:
+        seq=Entrez.read(handle,validate=False)
+        doc_sum=seq['DocumentSummarySet']['DocumentSummary'][0]
+        sp=doc_sum['SpeciesName']
+        acc=doc_sum['LastMajorReleaseAccession']
+        taxid=doc_sum['SpeciesTaxid']
+        ftp.append('%s\t%s\t%s' %(taxid,sp,acc))
+        print('%s\t%s' %(len(ftp),sp))
+        print('start:\t'+datetime.datetime.now().strftime('%X'))
+        base='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/'
+        url=acc.split('.')[0].replace('_','')
+        url=base+'/'.join(url[i:i+3] for i in range(0, len(url), 3))
+        url_sub=str(urllib.request.urlopen(url).read()).split()[-1].split('\\')[0]
+        url=url+'/'+url_sub+'/'+url_sub+'_genomic.gbff.gz'
+        file_name=sp.replace(' ','_').replace('.','')+'.'+acc+'.gb.gz'
+        urllib.request.urlretrieve(url,path+'genomes/plant_genomes/genbank_format/'+file_name)
+        print('finish:\t'+datetime.datetime.now().strftime('%X'))

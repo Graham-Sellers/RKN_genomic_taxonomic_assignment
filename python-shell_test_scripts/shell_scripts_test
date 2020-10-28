@@ -27,7 +27,7 @@ path=/media/graham/Storage/nems
 
 mkdir $path/nanopore_test_data/output/HAC_fasta_input/kraken2_standard
 
-files=$(ls $path/nanopore_test_data/02_nanopore_fasta_HAC_barcode_qfilterpass/ | sed 's/.fasta//')
+files=$(ls $path/nanopore_test_data/02_nanopore_fasta_HAC_barcode_qfilterpass/ | grep '.fastq' | sed 's/.fasta//')
 
 for a in $files
 do
@@ -51,7 +51,7 @@ path=/media/graham/Storage/nems
 
 mkdir $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard
 
-files=$(ls nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/ | sed 's/.fastq//')
+files=$(ls $path/nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/ | grep '.fastq' | sed 's/.fastq//')
 
 for a in $files
 do
@@ -64,4 +64,29 @@ $path/nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/${a}.fastq \
 --confidence 0.01 \
 --output $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard/${a}.tsv \
 --report $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard/${a}.txt
+done
+
+################################################################################
+# KRAKEN2 QC FASTQ INPUT
+# using fastq input from fastp for Kraken2 with a small confidence value (0.01)
+# additionally uses --minimum-base-quality 10 (another level of quality control)
+# bases/reads below this quality are ignored for taxonomic assignment
+
+path=/media/graham/Storage/nems
+
+mkdir $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard_qc
+
+files=$(ls $path/nanopore_test_data/03_qc/ | grep '.fastq' | sed 's/.fastq//')
+
+for a in $files
+do
+kraken2 --db $path/meloidogyne_dbs/meloidogyne_db \
+$path/nanopore_test_data/03_qc/${a}.fastq \
+--minimum-base-quality 10 \
+--use-names \
+--memory-mapping \
+--threads 10 \
+--confidence 0.01 \
+--output $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard_qc/${a}.tsv \
+--report $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard_qc/${a}.txt
 done
