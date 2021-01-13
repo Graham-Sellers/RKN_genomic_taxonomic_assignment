@@ -1,7 +1,7 @@
 # Root-knot nematode metagenomic analysis
 ### Proof of concept for metagenomic analysis of root-knot nematode sequencing data from Oxford Nanopore Technologies' MinION Flongle platform.
 
-## Quickstart
+### Quickstart
 
 1. Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 
@@ -9,7 +9,7 @@
    run `git clone https://github.com/Graham-Sellers/RKN_metagenomic_analysis`
     
 3. Install snakemake in your base conda environment  
-   run `conda activate base` (if it isn't already)  
+   run `conda activate base`  
    run `conda install -c bioconda -c conda-forge snakemake`
     
 4. Test dataset and databases are available at: insert dropbox link.  
