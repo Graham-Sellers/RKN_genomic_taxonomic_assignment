@@ -1,4 +1,5 @@
 .snakemake
 .git/
 data/databases/*
+data/libraries/*
 results/*
