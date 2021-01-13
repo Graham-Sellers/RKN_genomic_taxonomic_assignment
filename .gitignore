@@ -1,0 +1,4 @@
+.snakemake
+.git/
+data/*
+results/*

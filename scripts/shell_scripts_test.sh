@@ -1,4 +1,22 @@
 # tests in shell
+cd ../nems/
+
+cd data/databases/
+retaxdump
+
+pwd
+
+ls
+
+kraken2-build --download-taxonomy --db data/databases/master_db
+
+files=$(ls genomes/fasta_format/)
+for file in $files
+do
+kraken2-build --add-to-library genomes/fasta_format/$file --db data/databases/master_db --no-masking
+done
+
+kraken2-build --build --db data/databases/master_db
 
 # path is only here to allow for ease of wrangling from secondary HDD
 path=/media/graham/Storage/nems/

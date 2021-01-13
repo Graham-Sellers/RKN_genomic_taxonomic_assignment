@@ -4,11 +4,14 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - kraken2=2.0.9
-  - Python=3.7.4
-  - biopython=1.77
+  - kraken2
+  - Python
+  - biopython
   - blast
-  - matplotlib=3.3.1
-  - scipy=1.5.2
+  - matplotlib
+  - scipy
   - notebook
- - snakemake-minimal=5.3.0
+  - snakemake-minimal
+  - vsearch
+  - fastp
+  - sourmash

@@ -8,9 +8,9 @@ import pandas as pd
 import numpy as np
 import glob
 
-path='/media/graham/Storage/nems/'
+path='/media/graham/Storage/RKN_lib2/'
 
-ma_list = glob.glob(path+'nanopore_test_data/output//HAC_fastq_input/kraken2_standard_qc/*.txt')
+ma_list = glob.glob(path+'Kraken2_output/kraken2_standard_qc/*.txt')
 ma_list.sort()
 whole_bits=[]
 for output in ma_list:
@@ -34,5 +34,5 @@ for i in range(len(whole_bits)):
     df=pd.concat([df,dfp],axis=1,sort=False).fillna(0)
 df=df.transpose()
 
-df.to_csv(path+'nanopore_test_data/output/HAC_kraken2_standard_fastq.tsv',sep='\t')
+df.to_csv(path+'RKN_lib2_kraken2_standard.tsv',sep='\t')
 df

@@ -1,4 +1,33 @@
 # tests in python
+################################################################################
+# GB TO FASTA FORMAT for KRAKEN"
+
+from Bio import SeqIO
+import gzip
+import os
+import datetime
+
+#seq_list=[]
+path='/media/graham/Storage/nems/'
+gb_in='genomes/bacteria_fungi/genbank_format/'
+fa_out='genomes/bacteria_fungi/fasta_format/'
+
+files=sorted(os.listdir(path+gb_in))
+
+for file in files:
+    file_name=file.split('.gb.')[0]
+    print(file_name)
+    print('start:\t'+datetime.datetime.now().strftime('%X'))
+    with gzip.open(path+gb_in+file,'rt') as gb, open(path+fa_out+file_name+'.fasta','w') as outfile:
+        for record in SeqIO.parse(gb,'genbank'):
+            source = [f for f in record.features if f.type == 'source'][0]
+            species_name=(' '.join(source.qualifiers['organism'][0].split()[0:2]))
+            taxid=source.qualifiers['db_xref'][0].split(':')[1]
+            kraken_taxid=('>'+record.id+'|kraken:taxid|'+taxid+' '+species_name)
+            outfile.write('%s\n%s\n' %(kraken_taxid,record.seq))
+    print('finish:\t'+datetime.datetime.now().strftime('%X'))
+
+################################################################################
 
 # path is only here to allow for ease of wrangling from secondary HDD
 path='/media/graham/Storage/nems/'
@@ -11,10 +40,14 @@ import shutil
 import os
 import glob
 
-path='/media/graham/Storage/nems/'
+# path='/media/graham/Storage/nems/'
+# inpath=path+'fast5_output/HAC_barcode_qfiltered/pass/'
+# outpath=path+'nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/'
 
-inpath=path+'fast5_output/HAC_barcode_qfiltered/pass/'
-outpath=path+'nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/'
+path='/media/graham/Storage/'
+inpath=path+'nanopore_basecalled_data/RKN_lib3_HAC_barcode_bothends_qfiltered/pass/'
+outpath=path+'RKN_lib3/01_nanopore_fastq_HAC_barcode_qfilterpass/'
+
 barcodes=os.listdir(inpath)
 print(barcodes)
 
@@ -139,9 +172,9 @@ from Bio import SeqIO
 import os
 import pandas as pd
 
-path='/media/graham/Storage/nems/'
+path='/media/graham/Storage/RKN_lib2/'
 
-path_to_in=path+'nanopore_test_data/02_nanopore_fasta_HAC_barcode_qfilterpass/'
+path_to_in=path+'01_nanopore_fastq_HAC_barcode_qfilterpass/'
 df=pd.DataFrame()
 
 files=os.listdir(path_to_in)
@@ -152,7 +185,7 @@ files.sort()
 for file in files:
     print(file)
     with open(path_to_in+file,'r') as infile:
-        seqs=SeqIO.parse(infile,'fasta')
+        seqs=SeqIO.parse(infile,'fastq')
         read_lengths=[]
         for seq in seqs:
             read_lengths.append(len(seq))
@@ -162,26 +195,26 @@ for file in files:
 
 # rename columns
 
-dictionary={'barcode01':'mig_6',
-            'barcode02': 'mig_9',
-            'barcode03': 'mig_10',
-            'barcode04': 'mig_11',
-            'barcode05': 'mi♀️i_9',
-            'barcode06': 'mi♀️i_10'}
-
-column_rename=[]
-for column in df.columns:
-    for key in dictionary:
-        if key in column:
-            column=dictionary[key]
-    column_rename.append(column)
-column_rename
-
-df.columns=column_rename
+# dictionary={'barcode01':'mig_6',
+#             'barcode02': 'mig_9',
+#             'barcode03': 'mig_10',
+#             'barcode04': 'mig_11',
+#             'barcode05': 'mi♀️i_9',
+#             'barcode06': 'mi♀️i_10'}
+#
+# column_rename=[]
+# for column in df.columns:
+#     for key in dictionary:
+#         if key in column:
+#             column=dictionary[key]
+#     column_rename.append(column)
+# column_rename
+#
+# df.columns=column_rename
 
 # export to .tsv
 
-df.to_csv(path+'nanopore_test_data/output/HAC_readlengths.tsv',sep='\t')
+df.to_csv(path+'RKN_lib2_readlengths.tsv',sep='\t')
 
 df
 
@@ -198,8 +231,8 @@ path='/media/graham/Storage/nems/'
 Entrez.email='grahamssellers@gmail.com'
 
 search_list=[]
-search=('Solanum lycopersicum')
-with Entrez.esearch(db='assembly', term=search+'[orgn]', idtype='acc',retmax=100000) as handle:
+#search=('Solanum lycopersicum')
+with Entrez.esearch(db='assembly', term='GCA_000001405.28', idtype='acc',retmax=100000) as handle:
     record = Entrez.read(handle)
     print(record['Count'])
     for r in record['IdList']:
@@ -209,7 +242,7 @@ ftp=[]
 base='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/'
 
 for rec in search_list:
-    with Entrez.efetch(db='Assembly',id=rec,rettype='docsum',retmode='xml',idtype='acc',) as handle:
+    with Entrez.efetch(db='Assembly',id=rec,report='full',) as handle:
         seq=Entrez.read(handle,validate=False)
         doc_sum=seq['DocumentSummarySet']['DocumentSummary'][0]
         sp=doc_sum['SpeciesName']
@@ -224,5 +257,54 @@ for rec in search_list:
         url_sub=str(urllib.request.urlopen(url).read()).split()[-1].split('\\')[0]
         url=url+'/'+url_sub+'/'+url_sub+'_genomic.gbff.gz'
         file_name=sp.replace(' ','_').replace('.','')+'.'+acc+'.gb.gz'
-        urllib.request.urlretrieve(url,path+'genomes/plant_genomes/genbank_format/'+file_name)
+        print(url)
+        print(doc_sum)
+        # urllib.request.urlretrieve(url,path+'genomes/plant_genomes/genbank_format/'+file_name)
         print('finish:\t'+datetime.datetime.now().strftime('%X'))
+
+################################################################################
+
+from Bio import Entrez
+import os
+
+term='Solanum lycopersicum'
+
+def get_assembly_summary(id):
+    """Get esummary for an entrez id"""
+    esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+    esummary_record = Entrez.read(esummary_handle,validate=False)
+    return esummary_record
+
+def get_assemblies(term, download=True, path='assemblies'):
+    """Download genbank assemblies for a given search term.
+    Args:
+        term: search term, usually organism name
+        download: whether to download the results
+        path: folder to save to
+    """
+
+    from Bio import Entrez
+    #provide your own mail here
+    Entrez.email = "grahamssellers@gmail.com"
+    handle = Entrez.esearch(db="assembly", term=term, retmax='200')
+    record = Entrez.read(handle)
+    ids = record['IdList']
+    print (f'found {len(ids)} ids')
+    links = []
+    for id in ids:
+        #get summary
+        summary = get_assembly_summary(id)
+        #get ftp link
+        url = summary['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_GenBank']
+        if url == '':
+            continue
+        label = os.path.basename(url)
+        #get the fasta link - change this to get other formats
+        link = os.path.join(url,label+'_genomic.gbff.gz')
+        # print (link)
+        # print(label)
+        links.append(link)
+#         if download == True:
+#             #download link
+        urllib.request.urlretrieve(link, f'{label}.fna.gz')
+    return links

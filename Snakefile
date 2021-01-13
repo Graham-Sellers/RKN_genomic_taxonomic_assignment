@@ -1,53 +1,96 @@
+# ==============================================================================
+# RKN METAGENOMICS
+# taxonomic assignment workflow for root-knot nematode minion sequencing data
+# ==============================================================================
 
-samples, = glob_wildcards("01_raw_data/{sample}.fasta")
-#this will have to change, needs to be something from the merged barcode files
+configfile: "config.yaml"
 
-################################################################################
-# MERGE ALL FASTQ FILES IN BARCODE DIRECTORIES
+# ------------------------------------------------------------------------------
+# SAMPLE LIST: load sample information from file
+# ------------------------------------------------------------------------------
 
-rule merge_files:
+with open('samples.tsv') as infile:
+    sample_list = []
+    for line in infile:
+        sample_list.append(line.strip())
+SAMPLES = sample_list
+
+# ------------------------------------------------------------------------------
+# RULE ALL
+# ------------------------------------------------------------------------------
+
+rule all:
     input:
-        reads = expand("01_raw_data/{sample}_{size}/{sample}_{size}_{resample}.fasta", sample = samples, size = config["size"],resample = range(config["resample"]))
-    output:
-        reports = expand("results/kraken/{sample}_{size}/{sample}_{size}_{resample}.txt", sample = samples, size = config["size"],resample = range(config["resample"]))
+        expand("results/recentrifuge/{sample}.html", sample = SAMPLES)
 
-################################################################################
-# QC all reads with fastp, use this to size select too?
-# clean out and tidy the data prior to analysis.
+# ------------------------------------------------------------------------------
+# MERGE FASTQ: merge all fastq files per barcode
+# ------------------------------------------------------------------------------
 
-rule pastp_qc:
+rule merge_fastq:
     input:
-        reads = xxxxx # wildcard
+        reads = config["data_dir"] + "/pass/{SAMPLES}"
     output:
-        cleaned = yyyyy # wildcard
+        reads_merged = "results/merged_fastq/{SAMPLES}.merged.fastq"
+    shell:
+        "cat {input}/*runid*.fastq > {output}"
 
-################################################################################
-# KRAKEN2 TAXONOMIC ASSIGNMENT
-# will use fastq input
-# selected database will influence the outcome
+# ------------------------------------------------------------------------------
+# FASTP: qc and trimming of reads
+# ------------------------------------------------------------------------------
+
+rule fastp_qc:
+    input:
+        reads = "results/merged_fastq/{SAMPLES}.merged.fastq"
+    output:
+        reads_qc = "results/qc/{SAMPLES}.qc.fastq",
+        html = "results/qc/fastp_out/{SAMPLES}.fastp.html",
+        json = "results/qc/fastp_out/{SAMPLES}.fastp.json",
+        failed = "results/qc/failed_out/{SAMPLES}.failed.fastq"
+
+    shell:
+        "fastp -i {input.reads} \
+        -o {output.reads_qc} \
+        -A \
+        -f 30 \
+        -q 15 \
+        -l 2000 \
+        --failed_out {output.failed} \
+        -h {output.html} \
+        -j {output.json}"
+
+# ------------------------------------------------------------------------------
+# KRAKEN2: taxonomic assignment
+# ------------------------------------------------------------------------------
 
 rule kraken2:
     input:
-        reads = expand("results/chopped/{sample}_{size}/{sample}_{size}_{resample}.fastq", sample = samples, size = config["size"],resample = range(config["resample"]))
+        reads = "results/qc/{SAMPLES}.qc.fastq"
     output:
-        reports = expand("results/kraken/{sample}_{size}/{sample}_{size}_{resample}.txt", sample = samples, size = config["size"],resample = range(config["resample"])),
-        outputs = expand("results/kraken/{sample}_{size}/{sample}_{size}_{resample}.tsv", sample = samples, size = config["size"],resample = range(config["resample"]))
-    params:
-        db = directory("database"),
-        file = expand("{sample}_{size}/{sample}_{size}_{resample}", sample = samples, size = config["size"],resample = range(config["resample"]))
+        reports = "results/kraken2/reports/{SAMPLES}.txt",
+        outputs = "results/kraken2/outputs/{SAMPLES}.tsv"
     threads:
         10
-    # shell: # this doesnt work
-    #     "kraken2 --db {params.db} {input.reads} --use-names --memory-mapping --threads 10 --confidence 0.0 --report {output.reports} --output {output.outputs}"
-    run:
-        for read in params.file:
-            infile=("results/chopped/" + read + ".fastq")
-            report=("results/kraken/" + read + ".txt")
-            output=("results/kraken/" + read + ".tsv")
-            shell("kraken2 --db {params.db} {infile} --minimum-base-quality 10 --use-names --memory-mapping --threads 10 --confidence 0.01 --report {report} --output {output}")
+    shell:
+        "kraken2 --db {config[kraken2_db]} {input.reads} \
+        --minimum-base-quality 10 \
+        --use-names \
+        --threads {threads} \
+        --confidence 0.01 \
+        --report {output.reports} \
+        --output {output.outputs}"
 
-################################################################################
-# KRAKEN2 TAXONOMIC OUTPUT
-# wrangle all files into pandas dataframe and reorder to give a simple by sample reads per tax level .tsv file
+#  --memory-mapping
 
-# needs to be wiggled but look at python-shell_test_scripts/python_scripts_test (making a Kraken2 tsv output)
+# ------------------------------------------------------------------------------
+# RECENTRIFUGE: generating taxonomic level assignment html figure
+# ------------------------------------------------------------------------------
+
+rule recentrifuge:
+    input:
+        taxdb = config["taxdump"],
+        kraken_output = "results/kraken2/outputs/{SAMPLES}.tsv"
+    output:
+        "results/recentrifuge/{SAMPLES}.html"
+    shell:
+        "rcf -n {input.taxdb} -k {input.kraken_output} -o {output}"
