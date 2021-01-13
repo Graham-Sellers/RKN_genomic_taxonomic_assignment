@@ -1,6 +1,35 @@
 # Root-knot nematode metagenomic analysis
 ### Proof of concept for metagenomic analysis of root-knot nematode sequencing data from Oxford Nanopore Technologies' MinION Flongle platform.
 
+*Kraken 2* taxonomic assignment of guppy basecaller HAC basecalled MinION Flongle sequencing data. This is the final stage of a larger workflow designed for accurate taxonomic identification of individual root-knot nematodes via extraction and sequencing of long read genomic DNA.
+
+---
+
+## The Workflow
+*Note: This is a first draft. There will be more to come*
+
+**Inputs:**  
+- Basecalled library output from ONT Guppy basecaller (includes pass and fail directories plus sequencing metadata files)  
+- Custom Kraken 2 database
+- NCBI taxonomy nodes
+- Sample sheet (a .tsv file listing barcodes to be analysed)  
+
+### **Steps**  
+
+**1. Merge fastq files**  
+Merge all the fastq files inside each barcode directory of the nanopore sequencing data.  
+
+**2. *fastp* QC and trimming**  
+Stringent quality control of sequencing data (qscore >= 15), trimming of leading and trailing ends.  
+
+**3. *Kraken 2* taxonomic assignment**  
+A small custom database of specific genomes is used for identification of sequences.  
+
+**4. *Recentrifuge* figure generation**  
+Create human-readable and interactive html files from the *Kraken 2* outputs
+
+---
+
 ### Quickstart
 
 1. Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
@@ -17,8 +46,8 @@ Download test dataset and databases available from [Dropbox](https://www.dropbox
 Unzip it, there are 3 directories:  
     *RKN_lib3* (MinION basecalled + demultiplexed library)  
     *meloidogyne_tomato_human_sweetpotato_no-mask_db* (Kraken2 database ~ 8Gb)
-    *taxdump* (taonomy nodes for recentrifuge)
-Move *RKN_lib3* to *data/libraries*.  
+    *taxdump* (taonomy nodes for recentrifuge)  
+    Move *RKN_lib3* to *data/libraries*.  
 Move *meloidogyne_tomato_human_sweetpotato_no-mask_db* and *taxdump* to *data/databases*
 
 5. Make it go.  
