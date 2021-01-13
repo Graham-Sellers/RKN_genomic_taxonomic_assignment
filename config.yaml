@@ -2,7 +2,7 @@
 
 my_experiment: "RKN_lib3"
 
-data_dir: "data/RKN_lib3"
+data_dir: "data/libraries/RKN_lib3"
 # kraken2_db: "data/databases/meloidogyne_tomato_human_db"
 # kraken2_db: "data/databases/meloidogyne_tomato_human_no-mask_db"
 kraken2_db: "data/databases/meloidogyne_tomato_human_sweetpotato_no-mask_db"
