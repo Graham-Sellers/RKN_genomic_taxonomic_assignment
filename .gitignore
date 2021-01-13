@@ -1,5 +1,4 @@
+# ignore these
 .snakemake
 .git/
-data/databases/*
-data/libraries/*
-results/*
+results
