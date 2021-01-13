@@ -1,2 +1,2 @@
-# RKN_metagenomic_analysis
-Proof of concept for Kraken2 analysis of root-knot nematode metagenomic data from MinION Flongle sequencing platform
+# Root-knot nematode metagenomic analysis
+Proof of concept for metagenomic analysis of root-knot nematode sequencing data from Oxford Nanopore Technologies MinION Flongle platform
