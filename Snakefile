@@ -4,7 +4,6 @@
 # ==============================================================================
 
 configfile: "config.yaml"
-conda: "envs/tax.yaml"
 
 # ------------------------------------------------------------------------------
 # SAMPLE LIST: load sample information from file
@@ -29,6 +28,8 @@ rule all:
 # ------------------------------------------------------------------------------
 
 rule merge_fastq:
+    conda:
+        "envs/tax.yaml"
     input:
         reads = config["data_dir"] + "/pass/{SAMPLES}"
     output:
@@ -41,6 +42,8 @@ rule merge_fastq:
 # ------------------------------------------------------------------------------
 
 rule fastp_qc:
+    conda:
+        "envs/tax.yaml"
     input:
         reads = "results/merged_fastq/{SAMPLES}.merged.fastq"
     output:
@@ -65,6 +68,8 @@ rule fastp_qc:
 # ------------------------------------------------------------------------------
 
 rule kraken2:
+    conda:
+        "envs/tax.yaml"
     input:
         reads = "results/qc/{SAMPLES}.qc.fastq"
     output:
@@ -88,6 +93,8 @@ rule kraken2:
 # ------------------------------------------------------------------------------
 
 rule recentrifuge:
+    conda:
+        "envs/tax.yaml"
     input:
         taxdb = config["taxdump"],
         kraken_output = "results/kraken2/outputs/{SAMPLES}.tsv"
