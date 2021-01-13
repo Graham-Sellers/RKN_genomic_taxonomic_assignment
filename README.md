@@ -13,7 +13,7 @@ run `conda activate base`
 run `conda install -c bioconda -c conda-forge snakemake`
     
 4. Get the data.  
-Download test dataset and databases available at: insert dropbox link.  
+Download test dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)   
 Unzip it, there are 3 directories:  
     *RKN_lib3* (MinION basecalled + demultiplexed library)  
     *meloidogyne_tomato_human_sweetpotato_no-mask_db* (Kraken2 database ~ 8Gb)
