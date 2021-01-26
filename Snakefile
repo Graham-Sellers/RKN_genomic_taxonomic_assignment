@@ -9,7 +9,7 @@ configfile: "config.yaml"
 # SAMPLE LIST: load sample information from file
 # ------------------------------------------------------------------------------
 
-with open('samples.tsv') as infile:
+with open(config['sample_list'], 'r') as infile:
     sample_list = []
     for line in infile:
         sample_list.append(line.strip())
@@ -21,7 +21,10 @@ SAMPLES = sample_list
 
 rule all:
     input:
-        expand("results/recentrifuge/{sample}.html", sample = SAMPLES)
+        expand("results/kraken2/outputs/{sample}.krk", sample = SAMPLES),
+        expand("results/kraken2/reports/{sample}.txt", sample = SAMPLES),
+        "results/recentrifuge/run.html",
+        "results/recentrifuge/run.xlsx"
 
 # ------------------------------------------------------------------------------
 # MERGE FASTQ: merge all fastq files per barcode
@@ -38,30 +41,23 @@ rule merge_fastq:
         "cat {input}/*runid*.fastq > {output}"
 
 # ------------------------------------------------------------------------------
-# FASTP: qc and trimming of reads
+# NANOFILT: qc and trimming of reads
 # ------------------------------------------------------------------------------
 
-rule fastp_qc:
+rule nanofilt:
     conda:
         "envs/tax.yaml"
     input:
         reads = "results/merged_fastq/{SAMPLES}.merged.fastq"
     output:
-        reads_qc = "results/qc/{SAMPLES}.qc.fastq",
-        html = "results/qc/fastp_out/{SAMPLES}.fastp.html",
-        json = "results/qc/fastp_out/{SAMPLES}.fastp.json",
-        failed = "results/qc/failed_out/{SAMPLES}.failed.fastq"
-
+        nano_out = "results/qc/{SAMPLES}.qc.fastq"
     shell:
-        "fastp -i {input.reads} \
-        -o {output.reads_qc} \
-        -A \
-        -f 30 \
-        -q 15 \
-        -l 2000 \
-        --failed_out {output.failed} \
-        -h {output.html} \
-        -j {output.json}"
+        "NanoFilt {input.reads} \
+        -q {config[qual]} \
+        -l {config[len]} \
+        --headcrop {config[head]} \
+        --tailcrop {config[tail]} \
+        > {output.nano_out}"
 
 # ------------------------------------------------------------------------------
 # KRAKEN2: taxonomic assignment
@@ -74,19 +70,17 @@ rule kraken2:
         reads = "results/qc/{SAMPLES}.qc.fastq"
     output:
         reports = "results/kraken2/reports/{SAMPLES}.txt",
-        outputs = "results/kraken2/outputs/{SAMPLES}.tsv"
+        outputs = "results/kraken2/outputs/{SAMPLES}.krk"
     threads:
         10
     shell:
         "kraken2 --db {config[kraken2_db]} {input.reads} \
-        --minimum-base-quality 10 \
+        --minimum-base-quality {config[minq]} \
         --use-names \
         --threads {threads} \
-        --confidence 0.01 \
+        --confidence {config[conf]} \
         --report {output.reports} \
         --output {output.outputs}"
-
-#  --memory-mapping
 
 # ------------------------------------------------------------------------------
 # RECENTRIFUGE: generating taxonomic level assignment html figure
@@ -97,8 +91,14 @@ rule recentrifuge:
         "envs/tax.yaml"
     input:
         taxdb = config["taxdump"],
-        kraken_output = "results/kraken2/outputs/{SAMPLES}.tsv"
+        kraken_output = expand("results/kraken2/outputs/{sample}.krk", sample = SAMPLES)
+    params:
+        directory("results/kraken2/outputs/")
     output:
-        "results/recentrifuge/{SAMPLES}.html"
+        re_html = "results/recentrifuge/run.html",
+        re_xlsx = "results/recentrifuge/run.xlsx"
     shell:
-        "rcf -n {input.taxdb} -k {input.kraken_output} -o {output}"
+        "rcf -a \
+        -n {input.taxdb} \
+        -k {params} \
+        -o {output.re_html}"

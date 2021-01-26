@@ -19,8 +19,8 @@
 **1. Merge fastq files**  
 Merge all the fastq files inside each barcode directory of the nanopore sequencing data.  
 
-**2. *fastp* QC and trimming**  
-Stringent quality control of sequencing data (qscore >= 15), trimming of leading and trailing ends.  
+**2. *Nanofilt* QC and trimming**  
+Quality control of sequencing data (mean quality of 12), trimming of leading and trailing ends.  
 
 **3. *Kraken 2* taxonomic assignment**  
 A small custom database of specific genomes is used for identification of sequences.  
@@ -36,11 +36,11 @@ Create human-readable and interactive html files from the *Kraken 2* outputs
 
 2. git clone this repository.  
 run `git clone https://github.com/Graham-Sellers/RKN_metagenomic_analysis`
-    
+
 3. Install snakemake in your base conda environment.  
 run `conda activate base`  
 run `conda install -c bioconda -c conda-forge snakemake`
-    
+
 4. Get the data.  
 Download test dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)   
 Unzip it, there are 3 directories:  

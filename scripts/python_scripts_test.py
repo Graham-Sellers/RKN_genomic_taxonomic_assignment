@@ -170,53 +170,32 @@ df
 
 from Bio import SeqIO
 import os
+import glob
 import pandas as pd
 
-path='/media/graham/Storage/RKN_lib2/'
 
-path_to_in=path+'01_nanopore_fastq_HAC_barcode_qfilterpass/'
-df=pd.DataFrame()
+path_to_in = 'results/qc/'
+df = pd.DataFrame()
 
-files=os.listdir(path_to_in)
+files = glob.glob(path_to_in + '*.fastq')
 files.sort()
+print(files)
 
 # make into dataframe:
 
 for file in files:
     print(file)
-    with open(path_to_in+file,'r') as infile:
-        seqs=SeqIO.parse(infile,'fastq')
-        read_lengths=[]
+    with open(file, 'r') as infile:
+        name = os.path.basename(file).split('.qc')[0]
+        seqs = SeqIO.parse(infile, 'fastq')
+        read_lengths = []
         for seq in seqs:
             read_lengths.append(len(seq))
         read_lengths.sort()
-    dfp=pd.DataFrame(read_lengths,columns=[file])
-    df=pd.concat([df,dfp],axis=1,sort=False)
+    dfp = pd.DataFrame(read_lengths, columns = [name])
+    df = pd.concat([df, dfp], axis=1, sort=False)
 
-# rename columns
-
-# dictionary={'barcode01':'mig_6',
-#             'barcode02': 'mig_9',
-#             'barcode03': 'mig_10',
-#             'barcode04': 'mig_11',
-#             'barcode05': 'mi♀️i_9',
-#             'barcode06': 'mi♀️i_10'}
-#
-# column_rename=[]
-# for column in df.columns:
-#     for key in dictionary:
-#         if key in column:
-#             column=dictionary[key]
-#     column_rename.append(column)
-# column_rename
-#
-# df.columns=column_rename
-
-# export to .tsv
-
-df.to_csv(path+'RKN_lib2_readlengths.tsv',sep='\t')
-
-df
+df.to_csv('qc_readlengths.tsv', sep = '\t')
 
 ################################################################################
 # GENOME ASSEMBLY GRABBING AND DOWNLOADING
@@ -232,11 +211,75 @@ Entrez.email='grahamssellers@gmail.com'
 
 search_list=[]
 #search=('Solanum lycopersicum')
-with Entrez.esearch(db='assembly', term='GCA_000001405.28', idtype='acc',retmax=100000) as handle:
+term='Meloidogyne hapla'
+with Entrez.esearch(db='assembly', term=term, idtype='acc',retmax=100000) as handle:
     record = Entrez.read(handle)
     print(record['Count'])
     for r in record['IdList']:
         search_list.append(r)
+
+
+################################
+
+GCA_000002995.2_ASM299v2
+
+
+import os
+from Bio import Entrez
+
+term='nematoda'
+
+labels = []
+links = []
+
+def get_assembly_summary(id):
+    """Get esummary for an entrez id"""
+    esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+    esummary_record = Entrez.read(esummary_handle,validate=False)
+    return esummary_record
+
+Entrez.email = "grahamssellers@gmail.com"
+handle = Entrez.esearch(db="assembly", term=term, retmax='1000')
+record = Entrez.read(handle)
+ids = record['IdList']
+print (f'found {len(ids)} ids')
+links = []
+for id in ids:
+    #get summary
+    summary = get_assembly_summary(id)
+    #get ftp link
+    url = summary['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_GenBank']
+    if url == '':
+        continue
+    label = os.path.basename(url)
+    # print(label)
+    labels.append(label)
+    link = os.path.join(url,label+'_genomic.gbff.gz')
+    # print (link)
+    links.append(link)
+
+
+n=1
+for shit in links:
+    print('%s\t%s' %(n, shit))
+    n+=1
+
+
+
+
+
+'GCA_000147155.1_C_japonica-7.0.1'
+
+
+if 'GCA_000172435.1_Freeze_1' in labels:
+    print('oh yes')
+else:
+    print('shit, whay int it?')
+
+dip=['i','1','l']
+
+if 'i' in dip:
+    print('yep')
 
 ftp=[]
 base='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/'
@@ -308,3 +351,36 @@ def get_assemblies(term, download=True, path='assemblies'):
 #             #download link
         urllib.request.urlretrieve(link, f'{label}.fna.gz')
     return links
+
+# ------------------------------------------------------
+
+from Bio import Entrez
+import os
+import urllib.request
+
+esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+esummary_record = Entrez.read(esummary_handle,validate=False)
+term = 'nematoda'
+Entrez.email = "grahamssellers@gmail.com"
+handle = Entrez.esearch(db="assembly", term=term, retmax='200')
+record = Entrez.read(handle)
+ids = record['IdList']
+print (len(ids))
+links = []
+for id in ids:
+    #get summary
+    esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+    esummary_record = Entrez.read(esummary_handle,validate=False)
+    #get ftp link
+    url = summary['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_GenBank']
+    if url == '':
+        continue
+    label = os.path.basename(url)
+    print(label)
+    #get the fasta link - change this to get other formats
+    link = os.path.join(url, label + '_genomic.fna.gz')
+    print (link)
+    links.append(link)
+    # if download == True:
+        #download link
+        # urllib.request.urlretrieve(link, '{label}.fna.gz')

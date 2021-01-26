@@ -1,0 +1,101 @@
+#install.packages('circlize')
+library('circlize')
+
+getwd()
+
+path = '../z_results_nematoda_conf02_qual07/kraken2/reports'
+
+#path = '../results/kraken2/reports'
+
+file_names = dir(path, pattern ='.txt')
+file_names = gsub('.txt','',file_names[file_names != 'unclassified.txt'])
+samples = list()
+for(i in (file_names)){
+  df = read.csv(paste(path,'/',i,'.txt',sep = ''),header=F, sep='\t')
+  df = df[(grep('Meloidogyne', df[,6])),]
+  df$taxlen = lengths(regmatches(df[,6], gregexpr("  ", df[,6])))
+  df$prop = rev(cumsum(rev(df[,3]))/sum(df[,3]))
+  df$taxlen= 1/(df$taxlen - (min(df$taxlen) -1))
+  df$otus = trimws(df[,6])
+  samples[[i]]=df
+}
+
+samples[8]
+
+names(samples)
+
+if (length(samples) == 10){
+names(samples) = c('M. arenaria 01','M. arenaria 03','M. arenaria 03',
+                   'M. javanica 01','M. javanica 02','M. javanica 03',
+                   'M. hapla 01','M. hapla 02','M. hapla 03',
+                   'M. incognita 01') 
+}
+if (length(samples) == 12){
+  names(samples) = c('M. incognita 01','M. incognita 02','M. incognita 03',
+                     'M. incognita 04','M. incognita 05','M. incognita 06',
+                     'M. incognita 07','M. incognita 08','M. incognita 09',
+                     'M. incognita 10','M. incognita 11','M. incognita 12') 
+}
+
+otu_list = c('Meloidogyne', 'Meloidogyne enterolobii', 'Meloidogyne graminicola', 'Meloidogyne hapla', 'Meloidogyne luci', 'Meloidogyne incognita group',
+             'Meloidogyne arenaria', 'Meloidogyne javanica', 'Meloidogyne incognita')
+
+shades = colorRampPalette(c('grey95','grey80','lightskyblue3','dodgerblue','royalblue3','purple','magenta','maroon','grey10'))(length(otu_list))
+names(shades) = otu_list
+
+# PLOT #
+
+#png('RKN_lib2_plot.png',width=1600,height=1600,units='px',pointsize=30) # for RKN_lib2
+#png('RKN_lib3x_plot.png',width=1600,height=1600,units='px',pointsize=30) # for RKN_lib3
+#pdf('RKN_lib2x_plot.pdf',width=8,height=8,pointsize=10) # for RKN_lib2
+
+png('RKN_lib3_nematoda_conf02_qual07_plot.png',width=1600,height=1600,units='px',pointsize=30) # for RKN_lib3
+
+#LO <- matrix(c(1,2,3,4,5,6,7,8,13,13,9,10,13,13,11,12), nrow=4, ncol=4, byrow=TRUE) # for RKN_lib2
+LO <- matrix(c(1,2,3,4,11,11,5,6,11,11,7,8,11,11,9,10), nrow=4, ncol=4, byrow=TRUE) # for RKN_lib3
+
+WIDTHS <- c(2,2,2,2) #widths of each figure in layout (i.e. column widths)
+HEIGHTS <- c(2,2,2,2)  #heights of each figure in layout (i.e. row heights)
+
+layout(LO, heights=HEIGHTS, widths=WIDTHS)
+
+par(mar=c(1,1,2,1))
+
+used_otus = list()
+for (s in 1:length(samples)){
+  dfp=samples[[s]]
+  used_otus = c(used_otus, dfp$otus)
+  used_otus = unique(used_otus)
+  plot(0,0,axes = F,cex = 0, ylab=NA,xlab=NA,asp = 1, main = names(samples[s]), cex.main = 2.5)
+  for (i in 1:dim(dfp)[1]){
+    draw.sector(
+      start.degree = 270,
+      end.degree = -(360 * dfp[i,]$prop)+270,
+      rou1 = 1,
+      rou2 = ifelse(1 - dfp[i,]$taxlen == 0, 0.25, 1- dfp[i,]$taxlen),
+      center = c(0, 0),
+      clock.wise = T,
+      col = shades[dfp[i,]$otus],
+      border = "black",
+      lwd = par("lwd"),
+      lty = par("lty"))
+  }
+  text(-1.1,-1,paste('n =',sum(dfp[,3]),sep=' '),pos=4,font=3,cex=1.2)
+}
+
+used_otus = otu_list[otu_list %in% used_otus]
+
+shades[used_otus]
+par(mar=c(0,0,0,0))
+
+plot(0,0,xlim=c(0,2),ylim=c(0,3), cex=0, axes = F)
+legend('left', legend=(gsub('Meloidogyne ','M. ', used_otus)),
+       fill = shades[used_otus], cex=2.5, bty='n',
+       text.font = 3, pt.cex = 10, y.intersp = 1.5,
+       pt.lwd=4)
+
+dev.off()
+
+#############
+
+barplot(rep(1,length(used_otus)),space=0,col=shades[used_otus])

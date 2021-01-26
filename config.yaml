@@ -2,8 +2,35 @@
 
 my_experiment: "RKN_lib3"  # change as needed
 
+sample_list: 'samples.tsv'
+
 data_dir: "data/libraries/RKN_lib3"  # change as needed
+# data_dir: "data/libraries/RKN_lib2"  # change as needed
 
 kraken2_db: "data/databases/meloidogyne_tomato_human_sweetpotato_no-mask_db"  # change as needed
+# kraken2_db: "data/databases/mths_cleaned_db_05"  # change as needed
+# kraken2_db: "data/databases/mths_cleaned_db_03"  # change as needed
+# kraken2_db: "data/databases/mths_cleaned_db_01"  # change as needed
+# kraken2_db: ../database_creation/nematoda_db
 
 taxdump: "data/databases/taxdump"  # change as needed
+
+#-------------------------------------------------------------------------------
+
+# Nanofilt settings
+
+qual: 12  # change as needed
+
+len: 0   # change as needed
+
+head: 50  # change as needed
+
+tail: 50  # change as needed
+
+#-------------------------------------------------------------------------------
+
+# Kraken 2 settings
+
+minq: 7
+
+conf: 0.02

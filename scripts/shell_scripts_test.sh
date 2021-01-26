@@ -73,17 +73,23 @@ files=$(ls $path/nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/ |
 
 for a in $files
 do
-kraken2 --db $path/meloidogyne_dbs/meloidogyne_db \
-$path/nanopore_test_data/01_nanopore_fastq_HAC_barcode_qfilterpass/${a}.fastq \
---minimum-base-quality 10 \
+
+db=data/databases/meloidogyne_tomato_human_sweetpotato_no-mask_db
+
+kraken2-inspect --db $db > inspect.txt --threads 10
+
+db=data/databases/meloidogyne_tomato_human_sweetpotato_no-mask_db
+kraken2 --db $db \
+data/libraries/GCA_004785735.1_ASM478573v1_genomic.fasta \
 --use-names \
 --memory-mapping \
 --threads 10 \
---confidence 0.01 \
---output $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard/${a}.tsv \
---report $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard/${a}.txt
-done
+--confidence 0 \
+--output report_odd1.tsv \
+--report report.odd1.txt
 
+done
+ls ~/github/RKN_metagenomic_analysis/data/databases/meloidogyne_tomato_human_sweetpotato_no-mask_db
 ################################################################################
 # KRAKEN2 QC FASTQ INPUT
 # using fastq input from fastp for Kraken2 with a small confidence value (0.01)
@@ -108,3 +114,6 @@ $path/nanopore_test_data/03_qc/${a}.fastq \
 --output $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard_qc/${a}.tsv \
 --report $path/nanopore_test_data/output/HAC_fastq_input/kraken2_standard_qc/${a}.txt
 done
+
+
+seqkit stats -a

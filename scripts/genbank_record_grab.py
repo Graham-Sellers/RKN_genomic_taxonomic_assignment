@@ -50,7 +50,7 @@ for link in links:
         label = os.path.basename(link).replace('.', '_', 1)
         print(label)
         print('start:\t' + datetime.datetime.now().strftime('%X'))
-        urllib.request.urlretrieve(link,path + outdir + label)
+        urllib.request.urlretrieve(link, path + outdir + label)
         print('finish:\t' + datetime.datetime.now().strftime('%X'))
 
 ################################################################################
