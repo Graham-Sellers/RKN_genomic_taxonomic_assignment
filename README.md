@@ -35,7 +35,7 @@ Create human-readable and interactive html files from the *Kraken 2* outputs
 1. Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 
 2. git clone this repository.  
-run `git clone https://github.com/Graham-Sellers/RKN_metagenomic_analysis`
+run `git clone https://github.com/Graham-Sellers/RKN_genomic_taxonomic_assignment`
 
 3. Install snakemake in your base conda environment.  
 run `conda activate base`  
@@ -46,7 +46,7 @@ Download test dataset and databases available from [Dropbox](https://www.dropbox
 Unzip it, there are 3 directories:  
     *RKN_lib3* (MinION basecalled + demultiplexed library)  
     *meloidogyne_tomato_human_sweetpotato_no-mask_db* (Kraken2 database ~ 8Gb)
-    *taxdump* (taonomy nodes for recentrifuge)  
+    *taxdump* (taxonomy nodes for recentrifuge)  
     Move *RKN_lib3* to *data/libraries*.  
 Move *meloidogyne_tomato_human_sweetpotato_no-mask_db* and *taxdump* to *data/databases*
 
