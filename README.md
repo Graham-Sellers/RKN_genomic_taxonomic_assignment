@@ -47,6 +47,7 @@ Unzip it, there are 3 directories and a .tsv file:
     *RKN_db/* (Kraken2 database ~ 7Gb directory)
     *taxdump/* (taxonomy nodes for recentrifuge)  
     *RKN_test_lib.tsv* (list of sample names to be processed)  
+    
     Move *RKN_test_lib/* to *data/libraries/*.  
 Move *RKN_db/* and *taxdump/* to *data/databases/*  
 Move RKN_test_lib.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)
