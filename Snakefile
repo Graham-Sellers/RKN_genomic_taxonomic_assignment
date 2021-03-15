@@ -1,6 +1,6 @@
 # ==============================================================================
-# RKN METAGENOMICS
-# taxonomic assignment workflow for root-knot nematode minion sequencing data
+# RKN GENOMIC TAXONOMIC ASSIGNMENT
+# taxonomic assignment workflow for root-knot nematode Flongle sequencing data
 # ==============================================================================
 
 configfile: "config.yaml"
@@ -16,6 +16,17 @@ with open(config['sample_list'], 'r') as infile:
 SAMPLES = sample_list
 
 # ------------------------------------------------------------------------------
+# OPTIONAL INPUT TYPES: guppy or fastq
+# ------------------------------------------------------------------------------
+
+if config["input_type"] == "guppy":
+    ruleorder: guppy_input > fastq_input
+if config["input_type"] == "fastq":
+    ruleorder: fastq_input > guppy_input
+else:
+    print("add input file type to config")
+
+# ------------------------------------------------------------------------------
 # TARGET RULE
 # ------------------------------------------------------------------------------
 
@@ -23,22 +34,32 @@ rule all:
     input:
         expand("results/kraken2/outputs/{sample}.krk", sample = SAMPLES),
         expand("results/kraken2/reports/{sample}.txt", sample = SAMPLES),
-        "results/recentrifuge/run.html",
-        "results/recentrifuge/run.xlsx"
+        "results/recentrifuge/" + config['my_experiment'] + ".html",
+        "results/recentrifuge/" + config['my_experiment'] + ".xlsx"
 
 # ------------------------------------------------------------------------------
-# MERGE FASTQ: merge all fastq files per barcode
+# GUPPY INPUT: merge all fastq files per barcode directory
 # ------------------------------------------------------------------------------
 
-rule merge_fastq:
-    conda:
-        "envs/tax.yaml"
+rule guppy_input:
     input:
         reads = config["data_dir"] + "/pass/{SAMPLES}"
     output:
         reads_merged = "results/merged_fastq/{SAMPLES}.merged.fastq"
     shell:
-        "cat {input}/*runid*.fastq > {output}"
+        "cat {input.reads}/*runid*.fastq > {output}"
+
+# ------------------------------------------------------------------------------
+# FASTQ INPUT:
+# ------------------------------------------------------------------------------
+
+rule fastq_input:
+    input:
+        reads = config["data_dir"] + "/{SAMPLES}.fastq"
+    output:
+        reads_merged = "results/merged_fastq/{SAMPLES}.merged.fastq"
+    shell:
+        "cp {input.reads}.fastq {output}"
 
 # ------------------------------------------------------------------------------
 # NANOFILT: qc and trimming of reads
@@ -60,7 +81,7 @@ rule nanofilt:
         > {output.nano_out}"
 
 # ------------------------------------------------------------------------------
-# KRAKEN2: taxonomic assignment
+# KRAKEN2: taxonomic classification
 # ------------------------------------------------------------------------------
 
 rule kraken2:
@@ -95,8 +116,8 @@ rule recentrifuge:
     params:
         directory("results/kraken2/outputs/")
     output:
-        re_html = "results/recentrifuge/run.html",
-        re_xlsx = "results/recentrifuge/run.xlsx"
+        re_html = "results/recentrifuge/" + config['my_experiment'] + ".html",
+        re_xlsx = "results/recentrifuge/" + config['my_experiment'] + ".xlsx"
     shell:
         "rcf -a \
         -n {input.taxdb} \

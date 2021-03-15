@@ -1,27 +1,38 @@
 # add bits here as needed
 
-my_experiment: "RKN_lib3"  # change as needed
+# name of your experiment:
+my_experiment: "my_experiment"  # change as needed
 
-sample_list: 'samples.tsv'
+# tab delimited file with a sample name per line (i.e. barcode01)
+sample_list: "samples.tsv"  # change as needed
 
-data_dir: "data/libraries/RKN_lib3"  # change as needed
-# data_dir: "data/libraries/RKN_lib2"  # change as needed
+# path to dorectory of input files. See "input_type" (below)
+data_dir: "data/libraries/my_library"  # change as needed
 
-kraken2_db: "data/databases/meloidogyne_tomato_human_sweetpotato_no-mask_db"  # change as needed
-# kraken2_db: "data/databases/mths_cleaned_db_05"  # change as needed
-# kraken2_db: "data/databases/mths_cleaned_db_03"  # change as needed
-# kraken2_db: "data/databases/mths_cleaned_db_01"  # change as needed
-# kraken2_db: ../database_creation/nematoda_db
+#-------------------------------------------------------------------------------
+# Input_type:
+# options: "guppy" or "fastq"
 
+# "guppy": input files located in a guppy basecaller output directory
+# "fastq": input files located in a directory containing fastqs (1 per sample)
+
+input_type: "guppy"
+
+#-------------------------------------------------------------------------------
+# Kraken 2 database directory (path to directory):
+kraken2_db: "data/databases/RKN_final_db"  # change as needed
+
+# taxdump directory for Recentrifuge:
+# contains names.dmp and nodes.dmp
 taxdump: "data/databases/taxdump"  # change as needed
 
 #-------------------------------------------------------------------------------
 
-# Nanofilt settings
+# Nanofilt quality control settings:
 
-qual: 12  # change as needed
+qual: 0  # change as needed
 
-len: 0   # change as needed
+len: 1000   # change as needed
 
 head: 50  # change as needed
 
@@ -29,8 +40,8 @@ tail: 50  # change as needed
 
 #-------------------------------------------------------------------------------
 
-# Kraken 2 settings
+# Kraken 2 taxonomic classification settings:
 
-minq: 7
+minq: 7  # change as needed
 
-conf: 0.02
+conf: 0.02  # change as needed
