@@ -45,10 +45,11 @@ Download test dataset and databases available from [Dropbox](https://www.dropbox
 Unzip it, there are 3 directories and a .tsv file:  
     *RKN_test_lib/* (a Guppy basecalled + demultiplexed library)  
     *RKN_db/* (Kraken2 database ~ 7Gb directory)
-    *taxdump/* (taxonomy nodes for recentrifuge) 
-    *RKN_test_lib.tsv* (list of sample names to be processed)
+    *taxdump/* (taxonomy nodes for recentrifuge)  
+    *RKN_test_lib.tsv* (list of sample names to be processed)  
     Move *RKN_test_lib* to *data/libraries*.  
-Move *RKN_db/* and *taxdump/* to *data/databases/*
+Move *RKN_db/* and *taxdump/* to *data/databases/*  
+Place RKN_test_lib.tsv in the repository main directory
 
 5. Make it go.  
 run `snakemake --use-conda --cores`
