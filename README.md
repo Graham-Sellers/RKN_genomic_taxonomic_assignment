@@ -6,12 +6,11 @@
 ---
 
 ## The Workflow
-*Note: This is a first draft. There will be more to come*
 
 **Inputs:**  
 - Basecalled library output from ONT Guppy basecaller (includes pass and fail directories plus sequencing metadata files)  
-- Custom Kraken 2 database
-- NCBI taxonomy nodes
+- Kraken 2 database
+- NCBI taxonomy nodes (names.dmp, nodes.dmp)
 - Sample sheet (a .tsv file listing barcodes to be analysed)  
 
 ### **Steps**  
