@@ -1,5 +1,5 @@
-# Root-knot nematode metagenomic analysis
-### Proof of concept for metagenomic analysis of root-knot nematode sequencing data from Oxford Nanopore Technologies' MinION Flongle platform.
+# Genomic taxonomic assignment of individual root-knot nematodes
+### Species diagnostics for root-knot nematode sequencing data from Oxford Nanopore Technologies' Flongle platform.
 
 *Kraken 2* taxonomic assignment of guppy basecaller HAC basecalled MinION Flongle sequencing data. This is the final stage of a larger workflow designed for accurate taxonomic identification of individual root-knot nematodes via extraction and sequencing of long read genomic DNA.
 
@@ -44,11 +44,11 @@ run `conda install -c bioconda -c conda-forge snakemake`
 4. Get the data.  
 Download test dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)   
 Unzip it, there are 3 directories:  
-    *RKN_lib3* (MinION basecalled + demultiplexed library)  
-    *meloidogyne_tomato_human_sweetpotato_no-mask_db* (Kraken2 database ~ 8Gb)
-    *taxdump* (taxonomy nodes for recentrifuge)  
-    Move *RKN_lib3* to *data/libraries*.  
-Move *meloidogyne_tomato_human_sweetpotato_no-mask_db* and *taxdump* to *data/databases*
+    *RKN_test_lib/* (a Guppy basecalled + demultiplexed library)  
+    *RKN_db/* (Kraken2 database ~ 7Gb directory)
+    *taxdump/* (taxonomy nodes for recentrifuge)  
+    Move *RKN_test_lib* to *data/libraries*.  
+Move *RKN_db/* and *taxdump/* to *data/databases/*
 
 5. Make it go.  
 run `snakemake --use-conda --cores`
