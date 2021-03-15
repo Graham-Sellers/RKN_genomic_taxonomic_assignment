@@ -22,7 +22,7 @@ Merge all the fastq files inside each barcode directory of the nanopore sequenci
 Quality control of sequencing data (mean quality of 12), trimming of leading and trailing ends.  
 
 **3. *Kraken 2* taxonomic assignment**  
-A small custom database of specific genomes is used for identification of sequences.  
+A small *Meloidogyne* specific database is used for classification of sequences.  
 
 **4. *Recentrifuge* figure generation**  
 Create human-readable and interactive html files from the *Kraken 2* outputs
