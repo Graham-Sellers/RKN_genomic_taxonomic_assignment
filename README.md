@@ -1,7 +1,7 @@
 # Genomic taxonomic assignment of individual root-knot nematodes
-### Species diagnostics for root-knot nematode sequencing data from Oxford Nanopore Technologies' Flongle platform.
+### A genomics based species diagnostic tool for root-knot nematodes (RKN; genus *Meloidogyne*) using sequencing data from Oxford Nanopore Technologies' Flongle platform.
 
-*Kraken 2* taxonomic assignment of guppy basecaller HAC basecalled MinION Flongle sequencing data. This is the final stage of a larger workflow designed for accurate taxonomic identification of individual root-knot nematodes via extraction and sequencing of long read genomic DNA.
+*Kraken 2* taxonomic assignment of ONT Guppy basecaller high accuracy (HAC) basecalled Flongle sequencing data. This is the final stage of a larger workflow designed for accurate taxonomic identification of individual RKN via extraction and sequencing of long read genomic DNA.
 
 ---
 
