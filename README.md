@@ -19,7 +19,7 @@
 Merge all the fastq files inside each barcode directory of the nanopore sequencing data.  
 
 **2. *Nanofilt* QC and trimming**  
-Quality control of sequencing data (mean quality of 12), trimming of leading and trailing ends.  
+Quality control of sequencing data and read trimming.  
 
 **3. *Kraken 2* taxonomic assignment**  
 A small *Meloidogyne* specific database is used for classification of sequences.  
