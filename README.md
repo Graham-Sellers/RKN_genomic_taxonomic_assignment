@@ -42,10 +42,9 @@ run `conda install -c bioconda -c conda-forge snakemake`
 
 4. Get the test data.  
 Download RKN_test_dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)  
-Unzip them, there are 2 directories in databases:  
+Unzip them all, will give you 3 directories and a .tsv file:  
         *RKN_db/* (Kraken2 database ~ 7Gb directory)  
         *taxdump/* (taxonomy nodes for recentrifuge)  
-and a directory and a .tsv file in the test dataset:  
         *RKN_test_lib.tsv* (list of sample names to be processed) 
         *RKN_test_lib/* (a Guppy basecalled + demultiplexed library)  
 
