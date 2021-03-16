@@ -49,9 +49,9 @@ Unzip it, there are 3 directories and a .tsv file:
     *RKN_test_lib.tsv* (list of sample names to be processed)   
     
     Put the files where they need to be:  
-    Move *RKN_test_lib/* to *data/libraries/*  
+    Move *RKN_test_library/* to *data/libraries/*  
 Move *RKN_db/* and *taxdump/* to *data/databases/*  
-Move RKN_test_lib.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)
+Move RKN_test_samples.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)
 
 5. Make it go.  
 run `snakemake --use-conda --cores`
