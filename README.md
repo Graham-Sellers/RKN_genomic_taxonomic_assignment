@@ -47,7 +47,7 @@ Unzip them all, this will give you 3 directories and a .tsv file:
 *taxdump/* (nodes.dmp and names.dmp for recentrifuge)  
 *RKN_test_lib.tsv* (list of sample names to be processed) 
 *RKN_test_lib/* (a Guppy basecalled + demultiplexed library output directory)  
-Put the things where they need to be:  
+  Put the things where they need to be:  
 Move *RKN_test_library/* to *data/libraries/*  
 Move *RKN_db/* and *taxdump/* to *data/databases/*  
 Move RKN_test_samples.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)  
