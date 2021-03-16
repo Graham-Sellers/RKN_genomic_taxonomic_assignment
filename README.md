@@ -45,7 +45,7 @@ Download RKN_test_dataset and databases available from [Dropbox](https://www.dro
 Unzip them all, this will give you 3 directories and a .tsv file:  
 *RKN_db/* (Kraken2 database ~ 6.5 Gb directory containing 3 .k2d files)  
 *taxdump/* (nodes.dmp and names.dmp for recentrifuge)  
-*RKN_test_lib.tsv* (list of sample names to be processed) 
+*RKN_test_lib.tsv* (list of sample names to be processed)  
 *RKN_test_lib/* (a Guppy basecalled + demultiplexed library output directory)  
   
 5. Put the things where they need to be:  
