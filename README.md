@@ -43,14 +43,13 @@ run `conda install -c bioconda -c conda-forge snakemake`
 4. Get the test data.  
 Download RKN_test_dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)  
 Unzip them all, this will give you 3 directories and a .tsv file:  
-        *RKN_db/* (Kraken2 database ~ 6.5 Gb directory containing 3 .k2d files)  
-        *taxdump/* (nodes.dmp and names.dmp for recentrifuge)  
-        *RKN_test_lib.tsv* (list of sample names to be processed) 
-        *RKN_test_lib/* (a Guppy basecalled + demultiplexed library output directory)  
+*RKN_db/* (Kraken2 database ~ 6.5 Gb directory containing 3 .k2d files)  
+*taxdump/* (nodes.dmp and names.dmp for recentrifuge)  
+*RKN_test_lib.tsv* (list of sample names to be processed) 
+*RKN_test_lib/* (a Guppy basecalled + demultiplexed library output directory)  
 
-
-    Put the things where they need to be:  
-    Move *RKN_test_library/* to *data/libraries/*  
+Put the things where they need to be:  
+Move *RKN_test_library/* to *data/libraries/*  
 Move *RKN_db/* and *taxdump/* to *data/databases/*  
 Move RKN_test_samples.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)  
 *(note: no need to alter config.yaml, it is set for the test dataset)*
