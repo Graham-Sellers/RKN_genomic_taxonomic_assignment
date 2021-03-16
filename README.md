@@ -41,7 +41,7 @@ run `conda activate base`
 run `conda install -c bioconda -c conda-forge snakemake`
 
 4. Get the test data.  
-Download RKN_test_dataset.zip and RKN_databases_2021-03.zip available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)  
+Download RKN_test_dataset.zip and RKN_databases_2021-03.zip available from [OSF](http://dx.doi.org/10.17605/OSF.IO/VA7S2)  
 Unzip them all, this will give you 3 directories and a .tsv file:  
 *RKN_db/* (Kraken2 database ~ 6.5 Gb directory containing 3 .k2d files)  
 *taxdump/* (nodes.dmp and names.dmp for recentrifuge)  
