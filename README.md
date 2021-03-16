@@ -41,13 +41,15 @@ run `conda activate base`
 run `conda install -c bioconda -c conda-forge snakemake`
 
 4. Get the test data.  
-Download test dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)  
-Unzip it, there are 3 directories and a .tsv file:  
-    *RKN_test_lib/* (a Guppy basecalled + demultiplexed library)  
-    *RKN_db/* (Kraken2 database ~ 7Gb directory)
-    *taxdump/* (taxonomy nodes for recentrifuge)  
-    *RKN_test_lib.tsv* (list of sample names to be processed)   
-    
+Download RKN_test_dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)  
+Unzip them, there are 2 directories in databases:  
+        *RKN_db/* (Kraken2 database ~ 7Gb directory)  
+        *taxdump/* (taxonomy nodes for recentrifuge)  
+and a directory and a .tsv file in the test dataset:  
+        *RKN_test_lib.tsv* (list of sample names to be processed) 
+        *RKN_test_lib/* (a Guppy basecalled + demultiplexed library)  
+
+
     Put the files where they need to be:  
     Move *RKN_test_library/* to *data/libraries/*  
 Move *RKN_db/* and *taxdump/* to *data/databases/*  
