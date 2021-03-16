@@ -4,10 +4,10 @@
 my_experiment: "my_experiment"  # change as needed
 
 # tab delimited file with a sample name per line (i.e. barcode01)
-sample_list: "samples.tsv"  # change as needed
+sample_list: "RKN_test_samples.tsv"  # change as needed
 
 # path to dorectory of input files. See "input_type" (below)
-data_dir: "data/libraries/my_library"  # change as needed
+data_dir: "data/libraries/RKN_test_library"  # change as needed
 
 #-------------------------------------------------------------------------------
 # Input_type:
@@ -20,7 +20,7 @@ input_type: "guppy"
 
 #-------------------------------------------------------------------------------
 # Kraken 2 database directory (path to directory):
-kraken2_db: "data/databases/RKN_final_db"  # change as needed
+kraken2_db: "data/databases/RKN_db"  # change as needed
 
 # taxdump directory for Recentrifuge:
 # contains names.dmp and nodes.dmp
