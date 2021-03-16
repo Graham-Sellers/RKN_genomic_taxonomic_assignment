@@ -40,7 +40,7 @@ run `git clone https://github.com/Graham-Sellers/RKN_genomic_taxonomic_assignmen
 run `conda activate base`  
 run `conda install -c bioconda -c conda-forge snakemake`
 
-4. Get the data.  
+4. Get the test data.  
 Download test dataset and databases available from [Dropbox](https://www.dropbox.com/sh/5izuwb2ks61xbqg/AACzjETDpjWZh-d8R_qxYzWxa?dl=0)  
 Unzip it, there are 3 directories and a .tsv file:  
     *RKN_test_lib/* (a Guppy basecalled + demultiplexed library)  
@@ -51,7 +51,8 @@ Unzip it, there are 3 directories and a .tsv file:
     Put the files where they need to be:  
     Move *RKN_test_library/* to *data/libraries/*  
 Move *RKN_db/* and *taxdump/* to *data/databases/*  
-Move RKN_test_samples.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)
+Move RKN_test_samples.tsv to the project main directory (*RKN_genomic_taxonomic_assignment/*)  
+*(note: no need to alter config.yaml, it is set for the test dataset)*
 
 5. Make it go.  
 run `snakemake --use-conda --cores`
