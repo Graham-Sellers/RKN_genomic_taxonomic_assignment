@@ -77,4 +77,6 @@ Follow **Quick start** steps 1 - 3.
 
 The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the pass directory to relevant sample names - at present, Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file.  
 
-Alternatively, by changing "input_type" in config.yaml to "fastq" the workflow then assumes a directory (determined by "data_dir") containing fastq files, one per sample. This is for those who want to, for example, run data from the accompanying NCBI Bioproject PRJNA706653 without having to basecall raw fast5 MinKNOW output.
+Input data type
+
+The workflow's config.yaml has an input data type option, creatively called "input_type". This is set as "guppy" to process a basecalled library output directory from Guppy GPU basecaller. However, by changing "input_type" to "fastq" (in config.yaml) the workflow then assumes a directory (determined by "data_dir") containing fastq files, one per sample. This is for those who want to, for example, run data from the accompanying NCBI Bioproject PRJNA706653 SRA data without having to basecall raw fast5 MinKNOW output.
