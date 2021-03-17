@@ -75,7 +75,7 @@ Follow **Quick start** steps 1 - 3.
 
 **Input data:**  
 
-The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the pass directory to relevant and unique sample names - at present Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file. This does limit the analysis to processing 12 samples at a time.  
+The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the "pass" directory to relevant and unique sample names - at present Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file. This does limit the analysis to processing 12 samples at a time.  
 
 **Input data type**
 
