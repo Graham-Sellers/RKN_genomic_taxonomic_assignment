@@ -29,7 +29,7 @@ Create human-readable and interactive html files from the *Kraken 2* outputs
 
 ---
 
-### Quickstart
+### Quick start
 
 1. Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 
