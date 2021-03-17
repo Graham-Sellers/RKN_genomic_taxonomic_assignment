@@ -14,7 +14,8 @@ This workflow is designed to analyse a single Flongle sequencing library prepare
 This needs to be run on a HPC GPU node or a local machine with GPU computing capability see
 [here](https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf).  
 
-The result is a basecalled library output directory containing *pass/* and *fail/* directories plus sequencing metadata files. This then forms th input data for the workflow.
+The result is a basecalled library output directory containing *pass/* and *fail/* directories plus sequencing metadata files.  
+This then forms the input data for the workflow.
 
 ## The Workflow
 
