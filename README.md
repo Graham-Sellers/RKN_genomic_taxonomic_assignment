@@ -17,6 +17,8 @@ This needs to be run on a HPC GPU node or a local machine with GPU computing cap
 The result is a basecalled library output directory containing *pass/* and *fail/* directories plus sequencing metadata files.  
 This then forms the input data for the workflow.
 
+---
+
 ## The Workflow
 
 **Inputs**  
