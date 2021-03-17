@@ -5,7 +5,7 @@
 
 ---
 
-**Overview of input sequencing data preparation**
+**Input sequencing data preparation**
 
 This workflow is designed to analyse a single Flongle sequencing library prepared with ONT Rapid PCR Barcoding Kit (SQK-RPB004) and basecalled with Guppy GPU high accuracy (HAC) basecaller using the following:  
 
