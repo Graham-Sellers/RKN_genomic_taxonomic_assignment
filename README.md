@@ -15,7 +15,7 @@ This needs to be run on a HPC GPU node or a local machine with GPU computing cap
 [here](https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf).  
 
 The result is a basecalled library output directory containing *pass/* and *fail/* directories plus sequencing metadata files.  
-This is the basecalled library output data that is used in the the workflow.
+This is the basecalled library output directory used in the the workflow.
 
 ---
 
