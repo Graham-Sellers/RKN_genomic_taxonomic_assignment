@@ -22,7 +22,7 @@ This is the basecalled library output directory used in the the workflow.
 ## The Workflow
 
 **Inputs**  
-- Basecalled library output from ONT Guppy basecaller  
+- Basecalled library output directory from ONT Guppy basecaller  
 - Kraken 2 database
 - NCBI taxonomy nodes (names.dmp, nodes.dmp)
 - Sample sheet (a .tsv file listing barcodes/sample names to be analysed, one per line)  
