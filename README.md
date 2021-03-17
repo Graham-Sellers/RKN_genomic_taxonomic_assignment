@@ -59,14 +59,21 @@ run `snakemake --use-conda --cores`
 
 ### Detailed version
 
-This workflow is designed to analyse a single Flongle sequencing library prepared with ONT Rapid PCR Barcoding Kit (SQK-RPB004).  MinKNOW output is basecalled with Guppy gpu high accuracy (HAC) basecaller using the following:  
+
+**Setup**
+
+Follow **Quick start** steps 1 -3.
+
+**Overview**
+
+This workflow is designed to analyse a single Flongle sequencing library prepared with ONT Rapid PCR Barcoding Kit (SQK-RPB004).  MinKNOW output is basecalled with Guppy GPU high accuracy (HAC) basecaller using the following:  
 
 `guppy_basecaller --input_path path/to/fast5_directory -r --save_path path/to/outpu_directory --config dna_r9.4.1_450bps_hac.cfg --device cuda:0 --min_qscore 7 --qscore_filtering --barcode_kits "SQK-RPB004" --trim_barcodes --require_barcodes_both_ends`  
 
-This needs to be run on a HPC gpu node or on a local machine with GPU computing capability see
+This needs to be run on a HPC GPU node or a local machine with GPU computing capability see
 [here](https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf).
 
 **Input data:**  
 
 The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the pass directory to relevant sample names - at present, Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file.  
-Alternatively, by changing "input_type" in config.yaml to "fastq" the workflow then assumes a directory (determined by "data_dir") containing fastq files, one per sample. This is for those who want to run data from the accompanying NCBI Bioproject PRJNA706653 without having to basecall all raw fast5 MinKNOW output.
+Alternatively, by changing "input_type" in config.yaml to "fastq" the workflow then assumes a directory (determined by "data_dir") containing fastq files, one per sample. This is for those who want to run data from the accompanying NCBI Bioproject PRJNA706653 without having to basecall raw fast5 MinKNOW output.
