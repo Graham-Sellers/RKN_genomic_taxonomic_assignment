@@ -4,6 +4,7 @@
 *Kraken 2* taxonomic assignment of ONT Guppy basecaller high accuracy (HAC) basecalled Flongle sequencing data. This is the final stage of a larger workflow designed for accurate taxonomic identification of individual RKN via extraction and sequencing of long read genomic DNA.
 
 ---
+
 **Overview**
 
 This workflow is designed to analyse a single Flongle sequencing library prepared with ONT Rapid PCR Barcoding Kit (SQK-RPB004).  MinKNOW output is basecalled with Guppy GPU high accuracy (HAC) basecaller using the following:  
@@ -66,6 +67,8 @@ Move RKN_test_samples.tsv to the project main directory (*RKN_genomic_taxonomic_
 
 6. Make it go.  
 run `snakemake --use-conda --cores`
+
+---
 
 ### A detailed version
 
