@@ -25,7 +25,7 @@ This then forms the input data for the workflow.
 - Basecalled library output from ONT Guppy basecaller  
 - Kraken 2 database
 - NCBI taxonomy nodes (names.dmp, nodes.dmp)
-- Sample sheet (a .tsv file listing barcodes to be analysed)  
+- Sample sheet (a .tsv file listing barcodes/sample names to be analysed, one per line)  
 
 ### **Steps**  
 
@@ -56,7 +56,7 @@ run `conda install -c bioconda -c conda-forge snakemake`
 
 4. Get the test data.  
 Download RKN_test_dataset.zip and RKN_databases_2021-03.zip available from [OSF](http://dx.doi.org/10.17605/OSF.IO/VA7S2).  
-Unzip them, this will give you 3 directories and a .tsv file:  
+Unzip them, this will give you three directories and a .tsv file:  
 *RKN_db/* (Kraken2 database ~ 6.5 Gb directory containing 3 .k2d files)  
 *taxdump/* (nodes.dmp and names.dmp for recentrifuge)  
 *RKN_test_lib.tsv* (list of sample names to be processed)  
