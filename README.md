@@ -14,7 +14,7 @@ This workflow is designed to analyse a single Flongle sequencing library prepare
 This needs to be run on a HPC GPU node or a local machine with GPU computing capability see
 [here](https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf).  
 
-The result is a basecalled library output directory containing pass and fail directories plus sequencing metadata files.
+The result is a basecalled library output directory containing *pass/* and *fail/* directories plus sequencing metadata files.
 
 ## The Workflow
 
@@ -72,8 +72,8 @@ run `snakemake --use-conda --cores`
 
 ### A detailed account of input data
 
-The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the "pass" directory to relevant and unique sample names - at present Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file. This does however limit the analysis to processing 12 samples at a time.  
+The workflow takes in a Guppy basecaller output directory containing *pass/* and *fail/* directories plus sequencing metadata files (see above). It is recommended to rename the directories in the *pass/* directory to relevant and unique sample names - at present Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet (.tsv file targeted by *"sample_sheet"* in *config.yaml*). This does however limit the analysis to processing 12 samples at a time.  
 
 **Input data type**
 
-The workflow's config.yaml has an input data type option, creatively called "input_type". This is set as "guppy" to process a basecalled library output directory from Guppy GPU basecaller. However, by changing "input_type" to "fastq" (in config.yaml) the workflow then assumes a directory (determined by "data_dir" in config.yaml) containing fastq files, one per sample. This is for those who want to, for example, run the data from the accompanying NCBI BioProject (accession number PRJNA706653) SRA fastq data, without having to basecall raw fast5 MinKNOW output, or multiple libraries (by merging fastqs for each barcoded output from Guppy basecaller).
+The workflow's *config.yaml* has an input data type option, creatively called *"input_type"*. This is set as *"guppy"* to process a basecalled library output directory from Guppy GPU basecaller. However, by changing *"input_type"* to *"fastq"* (in config.yaml) the workflow then assumes a directory (determined by "data_dir" in config.yaml) containing fastq files, one per sample. This is for those who want to, for example, run the data from the accompanying NCBI BioProject (accession number PRJNA706653) SRA fastq data, without having to basecall raw fast5 MinKNOW output, or multiple libraries (by merging fastqs for each barcoded output from Guppy basecaller).
