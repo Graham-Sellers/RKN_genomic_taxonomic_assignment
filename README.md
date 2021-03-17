@@ -63,7 +63,8 @@ This workflow is designed to analyse a single Flongle sequencing library prepare
 
 `guppy_basecaller --input_path path/to/fast5_directory -r --save_path path/to/outpu_directory --config dna_r9.4.1_450bps_hac.cfg --device cuda:0 --min_qscore 7 --qscore_filtering --barcode_kits "SQK-RPB004" --trim_barcodes --require_barcodes_both_ends`  
 
-This needs to be run on a HPC gpu node or on a local machine with GPU computing capability see .[here].(https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf)
+This needs to be run on a HPC gpu node or on a local machine with GPU computing capability see
+[here](https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf).
 
 **Input data:**  
 
