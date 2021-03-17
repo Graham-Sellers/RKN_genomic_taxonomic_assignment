@@ -12,8 +12,8 @@ This workflow is designed to analyse a single Flongle sequencing library prepare
 
 This needs to be run on a HPC GPU node or a local machine with GPU computing capability see
 [here](https://community.nanoporetech.com/requirements_documents/minion-it-reqs.pdf).  
-The resulting output is a directory containing pass and fail directories plus sequencing metadata files.
 
+The result is a basecalled library output directory containing pass and fail directories plus sequencing metadata files.
 
 ## The Workflow
 
@@ -26,7 +26,7 @@ The resulting output is a directory containing pass and fail directories plus se
 ### **Steps**  
 
 **1. Merge fastq files**  
-Merge all the fastq files inside each barcode directory of the nanopore sequencing data.  
+Merge all the fastq files inside each barcode directory of the basecalled library output.  
 
 **2. *Nanofilt* QC and trimming**  
 Quality control of sequencing data and read trimming.  
@@ -77,4 +77,4 @@ Follow **Quick start** steps 1 - 3.
 
 The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the pass directory to relevant sample names - at present, Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file.  
 
-Alternatively, by changing "input_type" in config.yaml to "fastq" the workflow then assumes a directory (determined by "data_dir") containing fastq files, one per sample. This is for those who want to run data from the accompanying NCBI Bioproject PRJNA706653 without having to basecall raw fast5 MinKNOW output.
+Alternatively, by changing "input_type" in config.yaml to "fastq" the workflow then assumes a directory (determined by "data_dir") containing fastq files, one per sample. This is for those who want to, for example, run data from the accompanying NCBI Bioproject PRJNA706653 without having to basecall raw fast5 MinKNOW output.
