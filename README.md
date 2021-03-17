@@ -18,7 +18,7 @@ The result is a basecalled library output directory containing pass and fail dir
 
 ## The Workflow
 
-**Inputs:**  
+**Inputs**  
 - Basecalled library output from ONT Guppy basecaller  
 - Kraken 2 database
 - NCBI taxonomy nodes (names.dmp, nodes.dmp)
@@ -70,13 +70,7 @@ run `snakemake --use-conda --cores`
 
 ---
 
-### A detailed version
-
-**Setup**
-
-Follow **Quick start** steps 1 - 3.
-
-**Input data:**  
+### A detailed account for input data
 
 The workflow takes in a Guppy basecaller output directory containing pass and fail directories plus sequencing metadata files (see above). It is recommended to rename the directories in the "pass" directory to relevant and unique sample names - at present Guppy names them "barcode01", "barcode02" etc. These sample names (if changed) should be reflected in the sample sheet .tsv file. This does however limit the analysis to processing 12 samples at a time.  
 
