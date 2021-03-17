@@ -59,7 +59,7 @@ rule fastq_input:
     output:
         reads_merged = "results/merged_fastq/{SAMPLES}.merged.fastq"
     shell:
-        "cp {input.reads}.fastq {output}"
+        "cp {input.reads} {output}"
 
 # ------------------------------------------------------------------------------
 # NANOFILT: qc and trimming of reads
